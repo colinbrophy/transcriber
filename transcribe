@@ -20,12 +20,18 @@ mkdir -p "$output_folder"
 whisper_output="$output_folder/whisper_output.json"
 json_to_text_output="$output_folder/json_to_text_output.txt"
 clean_transcript_output="$output_folder/clean_transcript_output.txt"
+labeled_transcript_output="$output_folder/labeled_transcript_output.txt"
 
 # Run whisperx.py, save output, and check for errors
 ./whisperx.py "$input_file" | tee "$whisper_output" | \
   ./jsontotext.py | tee "$json_to_text_output" | \
   ./cleantranscript.py > "$clean_transcript_output" || {
     echo "Error: One of the commands failed"
+    exit 1
+}
+
+./labeltranscript.py "$clean_transcript_output" || {
+    echo "Error: Labeling failed"
     exit 1
 }
 
