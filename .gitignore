@@ -1,1 +1,4 @@
-test.m4a
+*.m4a
+*.wav
+out.json
+test*.json
