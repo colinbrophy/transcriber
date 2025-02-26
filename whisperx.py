@@ -29,9 +29,9 @@ def main():
         "audio_file": file_input,
         "language": "en",  # Default language to English
         "diarization": True,  # Enable diarization
-        "huggingface_access_token": huggingface_token  # Pass Hugging Face token for diarization
+        "huggingface_access_token": huggingface_token,  # Pass Hugging Face token for diarization
+        "align_output": True  # Enable alignment
         # Optional parameters:
-        # "align_output": True,  # Enable alignment
         # "debug": True,
         # "vad_onset": 0.5,
         # "batch_size": 64,
