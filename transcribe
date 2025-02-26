@@ -10,8 +10,8 @@ fi
 input_file="$1"
 base_name=$(basename "$input_file" | sed 's/\.[^.]*$//')
 
-# Set the folder where intermediate files will be stored
-output_folder="$base_name"
+# Set the folder where all output files will be stored
+output_folder="output/$base_name"
 
 # Create the folder if it doesn't exist
 mkdir -p "$output_folder"
