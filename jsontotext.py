@@ -1,5 +1,6 @@
 import json
 import sys
+import ast
 
 def seconds_to_hhmmss(seconds):
     """Convert seconds to HH:MM:SS format."""
@@ -8,9 +9,21 @@ def seconds_to_hhmmss(seconds):
     secs = int(seconds % 60)
     return f"{hours:02}:{minutes:02}:{secs:02}"
 
+def safe_load_json(json_str):
+    """Try loading JSON normally, and if it fails, attempt a relaxed repair."""
+    try:
+        return json.loads(json_str)
+    except json.JSONDecodeError:
+        try:
+            # Fix common issues like single quotes or missing double quotes
+            return ast.literal_eval(json_str)
+        except Exception:
+            print("Error: Could not parse JSON. Please check the format.", file=sys.stderr)
+            sys.exit(1)
+
 def format_transcript(json_data):
     """Format a transcript from JSON data."""
-    data = json.loads(json_data)
+    data = safe_load_json(json_data)
     transcript_lines = []
 
     for segment in data.get("segments", []):
@@ -24,8 +37,7 @@ def format_transcript(json_data):
     return "\n\n".join(transcript_lines)
 
 if __name__ == "__main__":
-    # Read JSON input from stdin
-    json_input = sys.stdin.read()
+    json_input = sys.stdin.read().strip()
     
     # Format and print the transcript
     formatted_transcript = format_transcript(json_input)
