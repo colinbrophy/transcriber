@@ -30,7 +30,7 @@ labeled_transcript_output="$output_folder/labeled_transcript_output.txt"
     exit 1
 }
 
-./labeltranscript.py "$clean_transcript_output" || {
+./labelandformat "$clean_transcript_output" || {
     echo "Error: Labeling failed"
     exit 1
 }

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./labelspeakers.py "$1" | sed 's/^\[[^]]*\] //' | sed 's/^\([A-Za-z]*\):/ **\1**:/g' || {
+    echo "Error: Labeling or sed processing failed"
+    exit 1
+}
