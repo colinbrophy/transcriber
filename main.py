@@ -10,19 +10,22 @@ def main():
     
     audio_file_path = sys.argv[1]
     
+    # Open the audio file
+    file_input = open(audio_file_path, "rb")
+    
     # Ensure the API tokens are set
     replicate_token = os.getenv("REPLICATE_API_TOKEN")
-    huggingface_token = os.getenv("HUGGINGFACE_ACCESS_TOKEN")
+    huggingface_token = os.getenv("HUGGING_FACE_READ_TOKEN")
     
     if not replicate_token:
         raise EnvironmentError("Please set the REPLICATE_API_TOKEN environment variable.")
     
     if not huggingface_token:
-        raise EnvironmentError("Please set the HUGGINGFACE_ACCESS_TOKEN environment variable for diarization.")
+        raise EnvironmentError("Please set the HUGGING_FACE_READ_TOKEN environment variable for diarization.")
 
     # Define the input parameters for the WhisperX model
     inputs = {
-        "audio_file": audio_file_path,
+        "audio_file": file_input,
         "language": "en",  # Default language to English
         "diarization": True,  # Enable diarization
         "align_output": True,  # Enable alignment
@@ -48,6 +51,9 @@ def main():
 
     # Print the transcription output
     print(output)
+
+    # Close the file
+    file_input.close()
 
 if __name__ == "__main__":
     main()
