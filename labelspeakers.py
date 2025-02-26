@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import re
 import sys
 
@@ -9,9 +7,18 @@ pattern = re.compile(r"(\[\d{2}:\d{2}:\d{2}\]) (SPEAKER_\d{2}): (.*)")
 speaker_map = {}
 structured_transcript = []
 
-transcript = sys.stdin.read()
+# Ensure a filename argument is provided
+if len(sys.argv) < 2:
+    print("Error: No input file provided. Usage: python script.py <transcript_file>")
+    sys.exit(1)
 
-for line in transcript.split("\n"):
+filename = sys.argv[1]
+
+# Read from the specified file
+with open(filename, "r") as file:
+    transcript = file.readlines()
+
+for line in transcript:
     match = pattern.match(line)
     if match:
         timestamp, speaker, text = match.groups()
@@ -23,4 +30,5 @@ for line in transcript.split("\n"):
     elif line.strip():
         structured_transcript.append(f"{text}")  # Continue dialogue without a new speaker label
 
+# Print the structured transcript to stdout
 print("\n".join(structured_transcript))
