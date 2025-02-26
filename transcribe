@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Check if the input file is provided
+if [ -z "$1" ]; then
+  echo "Error: No input file provided"
+  exit 1
+fi
+
+# Extract the base name of the input file (without extension)
+input_file="$1"
+base_name=$(basename "$input_file" | sed 's/\.[^.]*$//')
+
+# Set the folder where intermediate files will be stored
+output_folder="$base_name"
+
+# Create the folder if it doesn't exist
+mkdir -p "$output_folder"
+
+# Define filenames for intermediate files
+whisper_output="$output_folder/whisper_output.json"
+json_to_text_output="$output_folder/json_to_text_output.txt"
+clean_transcript_output="$output_folder/clean_transcript_output.txt"
+
+# Run whisperx.py, save output, and check for errors
+./whisperx.py "$input_file" | tee "$whisper_output" | \
+  ./jsontotext.py | tee "$json_to_text_output" | \
+  ./cleantranscript.py > "$clean_transcript_output" || {
+    echo "Error: One of the commands failed"
+    exit 1
+}
+
+echo "Process completed successfully. All intermediate files saved in '$output_folder'."
